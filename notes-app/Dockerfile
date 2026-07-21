@@ -1,5 +1,5 @@
 #1. Start from a base image with Python installed
-FROM python:3.12 
+FROM python:3.12
 #2. Set the working directory in the container
 WORKDIR /app
 #3. Copy the requirements file into the container
