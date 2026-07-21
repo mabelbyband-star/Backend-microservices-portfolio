@@ -1,0 +1,23 @@
+name: Docker Build Check
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t notes-app ./notes-app
+
+#What each part means:
+
+#on: push: branches: [main] — this pipeline runs automatically every time you push to the main branch
+#runs-on: ubuntu-latest — GitHub spins up a fresh Linux machine to run this on (you don't manage it, it's temporary and free for public repos)
+#actions/checkout@v4 — a ready-made step that pulls your repo's code onto that machine
+#docker build -t notes-app ./notes-app — the exact same build command you've been running by hand, just automated
