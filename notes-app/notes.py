@@ -50,6 +50,7 @@ from datetime import datetime
 from fastapi import FastAPI
 from pydantic import BaseModel
 import psycopg2
+import os
 
 app = FastAPI()
 
@@ -58,7 +59,7 @@ class NoteInput(BaseModel):
 
 def get_connection():
     return psycopg2.connect(
-        host="db",
+        host=os.environ.get("DB_HOST", "db"),
         database="notesdb",
         user="myuser",
         password="mypassword"
