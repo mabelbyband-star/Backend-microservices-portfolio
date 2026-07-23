@@ -65,8 +65,7 @@ def get_connection():
         password="mypassword"
     )
 
-@app.post("/notes")
-def create_note(note: NoteInput):
+def init_db():
     conn = get_connection()
     cur = conn.cursor()
     cur.execute("""
@@ -76,6 +75,18 @@ def create_note(note: NoteInput):
             timestamp TEXT
         )
     """)
+    conn.commit()
+    cur.close()
+    conn.close()
+
+@app.on_event("startup")
+def startup_event():
+    init_db()
+
+@app.post("/notes")
+def create_note(note: NoteInput):
+    conn = get_connection()
+    cur = conn.cursor()
     new_id = str(uuid.uuid4())
     new_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     cur.execute(
@@ -97,6 +108,5 @@ def get_notes():
     conn.close()
     notes = [{"id": r[0], "text": r[1], "timestamp": r[2]} for r in rows]
     return notes
-
 
     
