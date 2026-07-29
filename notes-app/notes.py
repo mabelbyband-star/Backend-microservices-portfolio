@@ -109,4 +109,17 @@ def get_notes():
     notes = [{"id": r[0], "text": r[1], "timestamp": r[2]} for r in rows]
     return notes
 
+@app.delete("/notes/{note_id}")
+def delete_note(note_id: str):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM notes WHERE id = %s", (note_id,))
+    rows_deleted = cur.rowcount
+    conn.commit()
+    cur.close()
+    conn.close()
+    if rows_deleted == 0:
+        return {"message": f"No note found with id {note_id}."}
+    return {"message": f"Note with id {note_id} deleted."}
+
     
