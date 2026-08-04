@@ -1,19 +1,25 @@
-name: Docker Build Check
+name: Habit Tracker Build Check
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'habit-tracker/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'habit-tracker/**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     services:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_DB: notesdb
+          POSTGRES_DB: habitsdb
           POSTGRES_USER: myuser
           POSTGRES_PASSWORD: mypassword
         ports:
@@ -34,10 +40,10 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: pip install -r notes-app/requirements.txt
+        run: pip install -r habit-tracker/requirements.txt
 
       - name: Run tests
-        working-directory: ./notes-app
+        working-directory: ./habit-tracker
         env:
           DB_HOST: localhost
         run: pytest
@@ -51,14 +57,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: ./notes-app
+          context: ./habit-tracker
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/notes-app:latest
-
-#What each part means:
-
-#on: push: branches: [main] — this pipeline runs automatically every time you push to the main branch
-#runs-on: ubuntu-latest — GitHub spins up a fresh Linux machine to run this on (you don't manage it, it's temporary and free for public repos)
-#actions/checkout@v4 — a ready-made step that pulls your repo's code onto that machine
-#docker build -t notes-app ./notes-app — the exact same build command you've been running by hand, just automated
-git add
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/habit-tracker:latest
+      
