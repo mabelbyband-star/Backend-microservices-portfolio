@@ -23,7 +23,7 @@ Each project follows the same progression: plain Python logic first (written and
 
 Each project folder has its own README with exact instructions, but the general pattern is:
 
-```
+```bash
 git clone https://github.com/mabelbyband-star/Backend-microservices-portfolio.git
 cd Backend-microservices-portfolio/notes-app   # or any other project folder
 docker compose up -d
