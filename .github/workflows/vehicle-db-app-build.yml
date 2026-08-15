@@ -1,0 +1,62 @@
+name: Vehicle DB App Build Check
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'vehicle-db-app/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'vehicle-db-app/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: vehicledb
+          POSTGRES_USER: myuser
+          POSTGRES_PASSWORD: mypassword
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r vehicle-db-app/requirements.txt
+
+      - name: Run tests
+        working-directory: ./vehicle-db-app
+        env:
+          DB_HOST: localhost
+        run: pytest
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./vehicle-db-app
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/vehicle-db-app:latest

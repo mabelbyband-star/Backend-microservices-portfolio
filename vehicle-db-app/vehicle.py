@@ -1,8 +1,35 @@
 import psycopg2
 import time
+import os
 from fastapi import FastAPI
 
 app = FastAPI()
+
+def get_connection():
+    return psycopg2.connect(
+        host=os.environ.get("DB_HOST", "db"),
+        database="vehicledb",
+        user="myuser",
+        password="mypassword"
+    )
+
+def init_db():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS vehicles (
+            id SERIAL PRIMARY KEY,
+            brand TEXT, model TEXT, year TEXT, color TEXT, upgrades TEXT
+        )
+    """)
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
+@app.on_event("startup")
+def startup_event():
+    init_db()
 
 class Vehicle:
     def __init__(self):
@@ -62,16 +89,8 @@ class Vehicle:
     def save_to_db(self):
       for attempt in range(5):
         try:
-          conn = psycopg2.connect(
-              host="db", database="vehicledb", user="myuser", password="mypassword"
-          )
+          conn = get_connection()
           cur = conn.cursor()
-          cur.execute("""
-              CREATE TABLE IF NOT EXISTS vehicles (
-                  id SERIAL PRIMARY KEY,
-                  brand TEXT, model TEXT, year TEXT, color TEXT, upgrades TEXT
-              )
-          """)
           cur.execute(
               "INSERT INTO vehicles (brand, model, year, color, upgrades) VALUES (%s, %s, %s, %s, %s)",
               (self.brand, self.model, self.year, self.color, ", ".join(self.added_upgrades))
@@ -85,13 +104,12 @@ class Vehicle:
           print("Database not ready yet, retrying...")
           time.sleep(2)
       print("Could not connect to database.")
-
-
+    
 # ---- New: API endpoints to VIEW saved vehicles ----
 
 @app.get("/vehicles")
 def get_vehicles():
-    conn = psycopg2.connect(host="db", database="vehicledb", user="myuser", password="mypassword")
+    conn = get_connection()
     cur = conn.cursor()
     cur.execute("SELECT id, brand, model, year, color, upgrades FROM vehicles;")
     rows = cur.fetchall()
