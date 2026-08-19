@@ -14,8 +14,7 @@ Each project follows the same progression: plain Python logic first (written and
 | [`habit-tracker`](./habit-tracker) | A habit tracker that calculates the longest streak of consecutive completed days | Python, FastAPI, PostgreSQL, Docker |
 | [`vehicle-db-app`](./vehicle-db-app) | An interactive vehicle customizer that saves each build to a database | Python, PostgreSQL, Docker |
 
-
-`notes-app` and `habit-tracker` are the most complete examples — both are fully containerized, backed by PostgreSQL, and have their own independent CI/CD pipeline (tests → build → publish to Docker Hub) that runs automatically on every pull request and push to `main`.
+All three projects are fully containerized, backed by PostgreSQL, and have their own independent CI/CD pipeline (tests → build → publish to Docker Hub) that runs automatically on every pull request and push to `main`.
 
 ## How to run a project
 
