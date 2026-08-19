@@ -13,9 +13,7 @@ Each project follows the same progression: plain Python logic first (written and
 | [`notes-app`](./notes-app) | A notes API — create, list, and delete text notes | Python, FastAPI, PostgreSQL, Docker |
 | [`habit-tracker`](./habit-tracker) | A habit tracker that calculates the longest streak of consecutive completed days | Python, FastAPI, PostgreSQL, Docker |
 | [`vehicle-db-app`](./vehicle-db-app) | An interactive vehicle customizer that saves each build to a database | Python, PostgreSQL, Docker |
-| [`compose-app`](./compose-app) | An early exercise wiring a FastAPI service to a Postgres database with Docker Compose | Python, FastAPI, PostgreSQL, Docker Compose |
-| [`fastapi-app`](./fastapi-app) | A minimal first FastAPI service, used to learn ports, volumes, and live-reload | Python, FastAPI, Docker |
-| [`vehicle-app`](./vehicle-app) | The original interactive Python script this portfolio started from | Python |
+
 
 `notes-app` and `habit-tracker` are the most complete examples — both are fully containerized, backed by PostgreSQL, and have their own independent CI/CD pipeline (tests → build → publish to Docker Hub) that runs automatically on every pull request and push to `main`.
 
