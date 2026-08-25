@@ -13,8 +13,9 @@ Each project follows the same progression: plain Python logic first (written and
 | [`notes-app`](./notes-app) | A notes API — create, list, and delete text notes | Python, FastAPI, PostgreSQL, Docker |
 | [`habit-tracker`](./habit-tracker) | A habit tracker that calculates the longest streak of consecutive completed days | Python, FastAPI, PostgreSQL, Docker |
 | [`vehicle-db-app`](./vehicle-db-app) | An interactive vehicle customizer that saves each build to a database | Python, PostgreSQL, Docker |
+| [`bank-app`](./bank-app) | A banking API — account registration with hashed passwords, deposits, withdrawals, and transfers with rollback safety | Python, FastAPI, PostgreSQL, bcrypt, Docker |
 
-All three projects are fully containerized, backed by PostgreSQL, and have their own independent CI/CD pipeline (tests → build → publish to Docker Hub) that runs automatically on every pull request and push to `main`.
+All four projects are fully containerized, backed by PostgreSQL, and have their own independent CI/CD pipeline (tests → build → publish to Docker Hub) that runs automatically on every pull request and push to `main`.
 
 ## How to run a project
 
